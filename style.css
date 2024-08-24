@@ -233,13 +233,13 @@ section .option_list .option {
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
-  cursor: pointer;
+  cursor: pointer !important;
   margin-bottom: 15px;
-  transition: all 0.3s ease-in-out;
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -ms-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.1s ease-in-out;
+  -webkit-transition: all 0.1s ease-in-out;
+  -moz-transition: all 0.1s ease-in-out;
+  -ms-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
 }
 
 .option_list .option:last-child {
@@ -255,7 +255,7 @@ section .option_list .option {
 .option_list .option .icon {
   height: 26px;
   width: 26px;
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
 .option_list .option .icon.tick {
@@ -327,6 +327,7 @@ footer .next_btn:hover {
 /* Reult Box */
 .result_box {
   opacity: 0;
+  z-index: -1;
   background-color: #fff;
   width: 450px;
   padding: 25px 30px;
@@ -393,4 +394,13 @@ footer .next_btn:hover {
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
+}
+
+/* check */
+.correct {
+  background-color: #9aeabc !important;
+}
+
+.incorrect {
+  background-color: #ff9393 !important;
 }

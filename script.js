@@ -39,7 +39,7 @@ const questions = [
 ];
 
 const questionElement = document.querySelector(".que_text");
-const answerButton = document.querySelector(".option_list");
+const answerButtons = document.querySelector(".option_list");
 const nextButton = document.querySelector(".next_btn");
 // const btn = "option";
 
@@ -55,6 +55,7 @@ function startQuiz(){
 }
 
 function showQuestion(){
+    resetState()
     let currentQuestion  = questions[currentQuestionIndex];
     let questionNo  = currentQuestionIndex +  1;
     questionElement.innerHTML = questionNo + ". " + currentQuestion.question;
@@ -68,21 +69,48 @@ function showQuestion(){
         span.innerHTML = answer.text;
         div.appendChild(span);
 
-    // add an icon (e.g., a checkmark or cross)
-        if (answer.correct !== undefined) {
-            const iconDiv = document.createElement("div");
-            iconDiv.classList.add("icon", answer.correct ? "tick" : "cross");
+    // add an icon (i.e. a checkmark or cross)
+        // if (answer.correct !== undefined) {
+        //     const iconDiv = document.createElement("div");
+        //     iconDiv.classList.add("icon", answer.correct ? "tick" : "cross");
 
-            const ionIcon = document.createElement("ion-icon");
-            ionIcon.name = answer.correct ? "checkmark-circle" : "close-circle";
+        //     const ionIcon = document.createElement("ion-icon");
+        //     ionIcon.name = answer.correct ? "checkmark-circle" : "close-circle";
 
-            iconDiv.appendChild(ionIcon);
-            div.appendChild(iconDiv);
-        }
+        //     iconDiv.appendChild(ionIcon);
+        //     div.appendChild(iconDiv);
+        // }
 
-        answerButton.appendChild(div);
+        answerButtons.appendChild(div);
+        
+        div.dataset.correct = answer.correct;
+    
+        div.addEventListener("click", selectAnswer);
     })
 }
 
+function resetState(){
+    nextButton.style.display = "none";
+    while(answerButtons.firstChild){
+        answerButtons.removeChild(answerButtons.firstChild);
+    }
+}
+
+function selectAnswer(e){
+    const selectedBtn = e.currentTarget;
+    const isCorrect = selectedBtn.dataset.correct === "true";
+
+    console.log("Selected Button:", selectedBtn);
+    console.log("Data Correct Value:", selectedBtn.dataset.correct);
+    console.log("Is Correct?", isCorrect);
+
+    if(isCorrect){
+        selectedBtn.classList.add("correct");
+    }
+    else{
+        selectedBtn.classList.add("incorrect");
+    }
+    
+}
 startQuiz();
 
