@@ -48,7 +48,9 @@ const nextButton = document.querySelector(".next_btn");
 let currentNo = document.querySelector(".currentNo");
 let totalNo = document.querySelector(".totalNo");
 
-
+// Result box
+const finalScore = document.querySelector(".score");
+const result_box =  document.querySelector(".result_box")
 
 // const btn = "option";
 
@@ -60,34 +62,53 @@ let score = 0;
 startButton.addEventListener("click", ()=>{
     startButton.style.display = "none";
     info_box.style.display = "block";
+  
 
 })
 
 // Button
-document.querySelectorAll(".check").forEach(check=>{
-    check.addEventListener("click", function(e){
-        const clickedBtn = e.currentTarget;
-        if (clickedBtn.classList.contains("quit")){
-            startButton.style.display = "block";
-            info_box.style.display = "none";
-        }
-        else if (clickedBtn.classList.contains("restart")){
-            info_box.style.display = "none";
-            quiz_box.style.display = "block";
-
-        }
-
-    })
-})
+function setupButtonListeners() {
+    document.querySelectorAll(".check").forEach(check => {
+        check.addEventListener("click", function(e) {
+            const clickedBtn = e.currentTarget;
+            if (clickedBtn.classList.contains("quit")) {
+                startButton.style.display = "block";
+                info_box.style.display = "none";
+                result_box.style.opacity = 0;
+                 result_box.style.zIndex = -1;
+                 startQuiz();
 
 
+            } else if (clickedBtn.classList.contains("restart")) {
+                info_box.style.display = "none";
+                quiz_box.style.display = "block";
+                result_box.style.opacity = 0;
+                result_box.style.zIndex = -1;
+                startQuiz();
+            }
+        });
+    });
+}
+setupButtonListeners();
 
+
+
+
+function displayResult(){
+    quiz_box.style.display = "none";
+    finalScore.textContent = score;
+    totalNo.textContent = questions.length;
+    result_box.style.opacity = 1;
+    result_box.style.zIndex = 0;
+
+
+}
 
 // start Quiz
 function startQuiz(){
     currentQuestionIndex = 0;
     score = 0;
-    nextButton.innerHTML = "Next";
+    // nextButton.innerHTML = "Next";
     // Question count
      currentNo.textContent = currentQuestionIndex;
     totalNo.textContent = questions.length;
@@ -171,9 +192,9 @@ nextButton.style.display = "block";
 
 function showScore(){
     resetState()
-    questionElement.innerHTML = `you scored ${score} out od ${questions.length}!`;
-    nextButton.innerHTML = "Play Again";
-    nextButton.style.display = "block";
+    displayResult()
+    setupButtonListeners();
+
 }
 
 function handleNextButton(){
