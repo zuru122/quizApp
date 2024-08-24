@@ -22,7 +22,7 @@ body {
 }
 
 .start_btn {
-  display: none;
+  /* display: none; */
 }
 /* Start quiz Button */
 .start_btn button {
@@ -132,10 +132,11 @@ body {
   /* box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.15); */
 }
 
+/* ---------------------------------------------------------- */
 /* Quiz Box */
 
 .quiz_box {
-  /* display: none; */
+  display: none;
   width: 550px;
   background-color: #fff;
   border-radius: 5px;
@@ -403,4 +404,10 @@ footer .next_btn:hover {
 
 .incorrect {
   background-color: #ff9393 !important;
+}
+
+/* disable div */
+.disabled {
+  pointer-events: none;
+  /* opacity: 0.6; */
 }

@@ -37,27 +37,71 @@ const questions = [
         ]
     },
 ];
-
+const startButton = document.querySelector(".start_btn");
+const  info_box = document.querySelector(".info_box");
+const quiz_box = document.querySelector(".quiz_box");
 const questionElement = document.querySelector(".que_text");
 const answerButtons = document.querySelector(".option_list");
 const nextButton = document.querySelector(".next_btn");
+
+// variable for question  count
+let currentNo = document.querySelector(".currentNo");
+let totalNo = document.querySelector(".totalNo");
+
+
+
 // const btn = "option";
 
 let currentQuestionIndex = 0;
 let score = 0;
+
+// Start Button
+
+startButton.addEventListener("click", ()=>{
+    startButton.style.display = "none";
+    info_box.style.display = "block";
+
+})
+
+// Button
+document.querySelectorAll(".check").forEach(check=>{
+    check.addEventListener("click", function(e){
+        const clickedBtn = e.currentTarget;
+        if (clickedBtn.classList.contains("quit")){
+            startButton.style.display = "block";
+            info_box.style.display = "none";
+        }
+        else if (clickedBtn.classList.contains("restart")){
+            info_box.style.display = "none";
+            quiz_box.style.display = "block";
+
+        }
+
+    })
+})
+
+
+
 
 // start Quiz
 function startQuiz(){
     currentQuestionIndex = 0;
     score = 0;
     nextButton.innerHTML = "Next";
+    // Question count
+     currentNo.textContent = currentQuestionIndex;
+    totalNo.textContent = questions.length;
     showQuestion();
 }
+
+
 
 function showQuestion(){
     resetState()
     let currentQuestion  = questions[currentQuestionIndex];
     let questionNo  = currentQuestionIndex +  1;
+    // increase question count
+    currentNo.textContent ++
     questionElement.innerHTML = questionNo + ". " + currentQuestion.question;
 
 
@@ -68,18 +112,6 @@ function showQuestion(){
         const span = document.createElement("span");
         span.innerHTML = answer.text;
         div.appendChild(span);
-
-    // add an icon (i.e. a checkmark or cross)
-        // if (answer.correct !== undefined) {
-        //     const iconDiv = document.createElement("div");
-        //     iconDiv.classList.add("icon", answer.correct ? "tick" : "cross");
-
-        //     const ionIcon = document.createElement("ion-icon");
-        //     ionIcon.name = answer.correct ? "checkmark-circle" : "close-circle";
-
-        //     iconDiv.appendChild(ionIcon);
-        //     div.appendChild(iconDiv);
-        // }
 
         answerButtons.appendChild(div);
         
@@ -97,20 +129,72 @@ function resetState(){
 }
 
 function selectAnswer(e){
+    // update question  number
+    //  currentNo.textContent ++;
+
+
     const selectedBtn = e.currentTarget;
     const isCorrect = selectedBtn.dataset.correct === "true";
 
-    console.log("Selected Button:", selectedBtn);
-    console.log("Data Correct Value:", selectedBtn.dataset.correct);
-    console.log("Is Correct?", isCorrect);
+    // Add an icon (i.e. a checkmark or cross)
+    const iconDiv = document.createElement("div");
+    iconDiv.classList.add("icon", isCorrect ? "tick" : "cross");
 
-    if(isCorrect){
+    const ionIcon = document.createElement("ion-icon");
+    ionIcon.name = isCorrect ? "checkmark-circle" : "close-circle";
+
+    iconDiv.appendChild(ionIcon);
+    selectedBtn.appendChild(iconDiv);
+
+    // Add the correct/incorrect class to the selected button
+    if (isCorrect) {
         selectedBtn.classList.add("correct");
-    }
-    else{
+        score++;
+    } else {
         selectedBtn.classList.add("incorrect");
     }
-    
-}
-startQuiz();
 
+   
+
+   Array.from(answerButtons.children).forEach(div => {
+    // Check if the answer is correct and apply the correct class
+    if (div.dataset.correct === "true") {
+        div.classList.add("correct");
+    }
+    div.classList.add("disabled"); 
+    div.removeEventListener("click", selectAnswer);
+});
+
+nextButton.style.display = "block";
+
+}
+
+function showScore(){
+    resetState()
+    questionElement.innerHTML = `you scored ${score} out od ${questions.length}!`;
+    nextButton.innerHTML = "Play Again";
+    nextButton.style.display = "block";
+}
+
+function handleNextButton(){
+    currentQuestionIndex ++;
+    if(currentQuestionIndex < questions.length){
+        showQuestion()
+    }
+    else{
+        console.log(score);
+        showScore();
+    }
+}
+
+
+nextButton.addEventListener("click", ()=>{
+    if(currentQuestionIndex < questions.length){
+        handleNextButton();
+    }
+    else{
+        startQuiz();
+    }
+});
+
+ startQuiz();
