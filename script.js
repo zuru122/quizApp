@@ -1,42 +1,43 @@
 "use strict";
-const questions = [
-    {
-        question: "which is largest animal in the world?",
-        answers: [
-            {text: "shark", correct: false},
-            {text: "Blue  whale", correct: true},
-            {text: "Elephant", correct: false},
-            {text: "Girafe", correct: false},
-        ]
-    },
-     {
-        question: "which is the smallest country in the world?",
-        answers: [
-            {text: "Vetican City", correct: true},
-            {text: "Bhutan", correct: false},
-            {text: "Nepal", correct: false},
-            {text: "Shri Lanka", correct: false},
-        ]
-    },
-     {
-        question: "which is the largest desert in the world?",
-        answers: [
-            {text: "Kalahari", correct: false},
-            {text: "Gobi", correct: false},
-            {text: "Sahara", correct: false},
-            {text: "Antartica", correct: true},
-        ]
-    },
-    {
-        question: "which is the smallest continent in the world?",
-        answers: [
-            {text: "Asia", correct: false},
-            {text: "Australia", correct: true},
-            {text: "Arctic", correct: false},
-            {text: "Africa", correct: false},
-        ]
-    },
-];
+import {questions} from "./questions.js"
+// const questions = [
+//     {
+//         question: "which is largest animal in the world?",
+//         answers: [
+//             {text: "shark", correct: false},
+//             {text: "Blue  whale", correct: true},
+//             {text: "Elephant", correct: false},
+//             {text: "Girafe", correct: false},
+//         ]
+//     },
+//      {
+//         question: "which is the smallest country in the world?",
+//         answers: [
+//             {text: "Vetican City", correct: true},
+//             {text: "Bhutan", correct: false},
+//             {text: "Nepal", correct: false},
+//             {text: "Shri Lanka", correct: false},
+//         ]
+//     },
+//      {
+//         question: "which is the largest desert in the world?",
+//         answers: [
+//             {text: "Kalahari", correct: false},
+//             {text: "Gobi", correct: false},
+//             {text: "Sahara", correct: false},
+//             {text: "Antartica", correct: true},
+//         ]
+//     },
+//     {
+//         question: "which is the smallest continent in the world?",
+//         answers: [
+//             {text: "Asia", correct: false},
+//             {text: "Australia", correct: true},
+//             {text: "Arctic", correct: false},
+//             {text: "Africa", correct: false},
+//         ]
+//     },
+// ];
 const startButton = document.querySelector(".start_btn");
 const  info_box = document.querySelector(".info_box");
 const quiz_box = document.querySelector(".quiz_box");
@@ -47,6 +48,9 @@ const nextButton = document.querySelector(".next_btn");
 // variable for question  count
 let currentNo = document.querySelector(".currentNo");
 let totalNo = document.querySelector(".totalNo");
+let totalQuestionElement  =  document.querySelector(".totalQuestion");
+totalQuestionElement.textContent =  questions.length;
+
 
 // Result box
 const finalScore = document.querySelector(".score");
@@ -57,6 +61,9 @@ const result_box =  document.querySelector(".result_box")
 let currentQuestionIndex = 0;
 let score = 0;
 
+// Timer
+let timeLeft  = 15;
+let timerInterval;
 // Start Button
 
 startButton.addEventListener("click", ()=>{
@@ -93,11 +100,10 @@ setupButtonListeners();
 
 
 
-
 function displayResult(){
     quiz_box.style.display = "none";
     finalScore.textContent = score;
-    totalNo.textContent = questions.length;
+    // totalNo.textContent = questions.length;
     result_box.style.opacity = 1;
     result_box.style.zIndex = 0;
 
@@ -110,7 +116,7 @@ function startQuiz(){
     score = 0;
     // nextButton.innerHTML = "Next";
     // Question count
-     currentNo.textContent = currentQuestionIndex;
+    currentNo.textContent = currentQuestionIndex;
     totalNo.textContent = questions.length;
     showQuestion();
 }
@@ -140,9 +146,60 @@ function showQuestion(){
     
         div.addEventListener("click", selectAnswer);
     })
+    startTimer();
 }
 
+// Timer Function
+function  startTimer(){
+    timeLeft = 15;
+    const timerElement = document.querySelector(".timer_sec");
+    timerElement.textContent = timeLeft;
+
+    clearInterval(timerInterval);
+
+    timerInterval = setInterval(()=>{
+        timeLeft--;
+        timerElement.textContent = timeLeft;
+
+        if(timeLeft <= 0){
+            clearInterval(timerInterval);
+            handleTimeExpiry();
+        }
+    }, 1000); //Update every second
+}
+
+function highlightCorrectAnswer(){
+    Array.from(answerButtons.children).forEach(div => {
+        if (div.dataset.correct === "true") {
+            div.classList.add("correct");
+            const iconDiv = document.createElement("div");
+            iconDiv.classList.add("icon", "tick"); 
+        
+            const ionIcon = document.createElement("ion-icon");
+            ionIcon.name = "checkmark-circle";
+            
+            // Check if the icon has already been added
+            if (!div.querySelector('.tick')) {
+                iconDiv.appendChild(ionIcon);
+                div.appendChild(iconDiv);
+            }
+        }
+        
+        div.classList.add("disabled");
+        div.removeEventListener("click", selectAnswer);
+    });
+
+    nextButton.style.display = "block";
+}
+
+function handleTimeExpiry(){
+    // disable all answer buttons when time is up
+    highlightCorrectAnswer();
+}
+
+
 function resetState(){
+    clearInterval(timerInterval)
     nextButton.style.display = "none";
     while(answerButtons.firstChild){
         answerButtons.removeChild(answerButtons.firstChild);
@@ -153,11 +210,14 @@ function selectAnswer(e){
     // update question  number
     //  currentNo.textContent ++;
 
+    clearInterval(timerInterval);
+
 
     const selectedBtn = e.currentTarget;
     const isCorrect = selectedBtn.dataset.correct === "true";
 
     // Add an icon (i.e. a checkmark or cross)
+
     const iconDiv = document.createElement("div");
     iconDiv.classList.add("icon", isCorrect ? "tick" : "cross");
 
@@ -175,18 +235,7 @@ function selectAnswer(e){
         selectedBtn.classList.add("incorrect");
     }
 
-   
-
-   Array.from(answerButtons.children).forEach(div => {
-    // Check if the answer is correct and apply the correct class
-    if (div.dataset.correct === "true") {
-        div.classList.add("correct");
-    }
-    div.classList.add("disabled"); 
-    div.removeEventListener("click", selectAnswer);
-});
-
-nextButton.style.display = "block";
+    highlightCorrectAnswer();
 
 }
 
