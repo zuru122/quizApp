@@ -150,23 +150,34 @@ function showQuestion(){
 }
 
 // Timer Function
-function  startTimer(){
-    timeLeft = 15;
+// Timer Function
+function startTimer() {
+    let timeLeft = 15;  
     const timerElement = document.querySelector(".timer_sec");
+    const timerBar = document.querySelector(".timer_bar");
     timerElement.textContent = timeLeft;
 
-    clearInterval(timerInterval);
+    clearInterval(timerInterval);  
 
-    timerInterval = setInterval(()=>{
+    timerBar.style.width = "100%";
+    let widthDecrement = 100 / timeLeft;
+    let currentWidth = 100; 
+
+    timerInterval = setInterval(() => {
         timeLeft--;
         timerElement.textContent = timeLeft;
 
-        if(timeLeft <= 0){
+        currentWidth -= widthDecrement;  
+        timerBar.style.width = currentWidth + "%";
+
+        if (timeLeft <= 0) {
             clearInterval(timerInterval);
-            handleTimeExpiry();
+            handleTimeExpiry();  
         }
-    }, 1000); //Update every second
+    }, 1000);
 }
+
+
 
 function highlightCorrectAnswer(){
     Array.from(answerButtons.children).forEach(div => {

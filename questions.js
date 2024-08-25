@@ -28,12 +28,12 @@ export const questions = [
         ]
     },
     {
-        question: "Which keyword is used to define a block scope variable in JavaScript?",
+        question: "What does the `parseFloat` function do in JavaScript?",
         answers: [
-            {text: "var", correct: false},
-            {text: "const", correct: true},
-            {text: "function", correct: false},
-            {text: "let", correct: true},
+            {text: "Converts a string to a floating-point number", correct: true},
+            {text: "Converts a string to an integer", correct: false},
+            {text: "Converts a number to a string", correct: false},
+            {text: "Rounds a number to the nearest integer", correct: false},
         ]
     },
     {

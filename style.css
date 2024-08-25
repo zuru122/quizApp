@@ -180,6 +180,18 @@ body {
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.timer_bar {
+  width: 100%;
+  height: 5px;
+  padding: 0 20px;
+  /* margin: 0 20px; Center the bar and add top and bottom margin */
+  background-color: #76c7c0;
+  transition: width 1s linear;
+  border-radius: 5px;
 }
 
 .quiz_box header .timer .timer_text {
