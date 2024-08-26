@@ -1,43 +1,6 @@
 "use strict";
 import {questions} from "./questions.js"
-// const questions = [
-//     {
-//         question: "which is largest animal in the world?",
-//         answers: [
-//             {text: "shark", correct: false},
-//             {text: "Blue  whale", correct: true},
-//             {text: "Elephant", correct: false},
-//             {text: "Girafe", correct: false},
-//         ]
-//     },
-//      {
-//         question: "which is the smallest country in the world?",
-//         answers: [
-//             {text: "Vetican City", correct: true},
-//             {text: "Bhutan", correct: false},
-//             {text: "Nepal", correct: false},
-//             {text: "Shri Lanka", correct: false},
-//         ]
-//     },
-//      {
-//         question: "which is the largest desert in the world?",
-//         answers: [
-//             {text: "Kalahari", correct: false},
-//             {text: "Gobi", correct: false},
-//             {text: "Sahara", correct: false},
-//             {text: "Antartica", correct: true},
-//         ]
-//     },
-//     {
-//         question: "which is the smallest continent in the world?",
-//         answers: [
-//             {text: "Asia", correct: false},
-//             {text: "Australia", correct: true},
-//             {text: "Arctic", correct: false},
-//             {text: "Africa", correct: false},
-//         ]
-//     },
-// ];
+
 const startButton = document.querySelector(".start_btn");
 const  info_box = document.querySelector(".info_box");
 const quiz_box = document.querySelector(".quiz_box");
